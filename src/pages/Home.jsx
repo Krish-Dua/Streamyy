@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL
 
@@ -45,10 +46,18 @@ const Navbar = React.memo(({ activeTab, setActiveTab }) => {
 })
 
 const HeroSection = React.memo(({ topShow }) => (
-  <section className="relative h-96 bg-linear-to-r from-indigo-500 to-violet-600 overflow-hidden">
+  <motion.section
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.6 }}
+    className="relative h-96 bg-linear-to-r from-indigo-500 to-violet-600 overflow-hidden"
+  >
     <div className="absolute inset-0 bg-black/20"></div>
     {topShow.poster && topShow.poster.includes('http') && (
-      <img
+      <motion.img
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.8 }}
         src={topShow.poster}
         alt={topShow.title}
         onError={(e) => { e.target.style.display = 'none' }}
@@ -57,17 +66,36 @@ const HeroSection = React.memo(({ topShow }) => (
     )}
     <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-white mb-2">{topShow.title}</h2>
-        <p className="text-lg text-slate-200 mb-4 max-w-2xl">{topShow.description}</p>
-        <div className="flex items-center space-x-4">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-4xl font-bold text-white mb-2"
+        >
+          {topShow.title}
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-lg text-slate-200 mb-4 max-w-2xl"
+        >
+          {topShow.description}
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex items-center space-x-4"
+        >
           <span className="bg-yellow-400 text-black px-2 py-1 rounded text-sm font-semibold">
             ★ {topShow.rating}
           </span>
           <span className="text-slate-300">{topShow.year}</span>
-        </div>
+        </motion.div>
       </div>
     </div>
-  </section>
+  </motion.section>
 ))
 
 const MovieCardSkeleton = () => (
@@ -85,7 +113,13 @@ const MovieCardSkeleton = () => (
 )
 
 const MovieCard = React.memo(({ movie, onSelect, onToggleWatchlist, isInWatchlist }) => (
-  <div className="group text-left">
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.3 }}
+    whileHover={{ scale: 1.05 }}
+    className="group text-left"
+  >
     <div className="relative overflow-hidden rounded-lg bg-slate-100 transition hover:-translate-y-1 hover:shadow-lg">
       <button
         type="button"
@@ -123,7 +157,7 @@ const MovieCard = React.memo(({ movie, onSelect, onToggleWatchlist, isInWatchlis
       <h3 className="text-sm font-medium text-slate-900 truncate">{movie.primaryTitle}</h3>
       <p className="text-xs text-slate-500">{movie.startYear || 'N/A'}</p>
     </div>
-  </div>
+  </motion.div>
 ))
 
 const ContentGrid = React.memo(({ items, loading, error, title, onLoadMore, hasMore, onSelectMovie, onToggleWatchlist, watchlist }) => {
@@ -159,9 +193,21 @@ const ContentGrid = React.memo(({ items, loading, error, title, onLoadMore, hasM
   }
 
   return (
-    <section className="py-8">
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="py-8"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">{title}</h2>
+        <motion.h2
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-2xl font-bold text-slate-900 mb-6"
+        >
+          {title}
+        </motion.h2>
         {loading && items.length === 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {Array.from({ length: 12 }).map((_, i) => (
@@ -169,12 +215,22 @@ const ContentGrid = React.memo(({ items, loading, error, title, onLoadMore, hasM
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center text-slate-600 shadow-sm">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="rounded-3xl border border-slate-200 bg-white p-8 text-center text-slate-600 shadow-sm"
+          >
             No titles found for this category yet.
-          </div>
+          </motion.div>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+            >
               {items.map((item) => (
                 <MovieCard 
                   key={item.id} 
@@ -184,7 +240,7 @@ const ContentGrid = React.memo(({ items, loading, error, title, onLoadMore, hasM
                   isInWatchlist={watchlist.some((movie) => movie.id === item.id)}
                 />
               ))}
-            </div>
+            </motion.div>
             {hasMore && (
               <div ref={sentinelRef} className="h-10 flex items-center justify-center">
                 {loading && <div className="text-slate-500">Loading more...</div>}
@@ -193,14 +249,26 @@ const ContentGrid = React.memo(({ items, loading, error, title, onLoadMore, hasM
           </>
         )}
       </div>
-    </section>
+    </motion.section>
   )
 })
 
 const ProfileView = React.memo(({ watchHistory, watchlist, onSignOut, onSelectMovie }) => (
-  <section className="py-12 bg-slate-50">
+  <motion.section
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.4 }}
+    className="py-12 bg-slate-50"
+  >
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8">Profile</h1>
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="text-3xl font-bold text-slate-900 mb-8"
+      >
+        Profile
+      </motion.h1>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -258,7 +326,7 @@ const ProfileView = React.memo(({ watchHistory, watchlist, onSignOut, onSelectMo
         </button>
       </div>
     </div>
-  </section>
+  </motion.section>
 ))
 
 const Home = () => {
@@ -435,22 +503,27 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-      {activeTab === 'home' && <HeroSection topShow={topShow} />}
-      {activeTab === 'profile' ? (
-        <ProfileView watchHistory={watchHistory} watchlist={watchlist} onSignOut={handleSignOut} onSelectMovie={handleOpenDetails} />
-      ) : (
-        <ContentGrid
-          items={items}
-          loading={loading}
-          error={error}
-          title={titleMap[activeTab]}
-          onLoadMore={handleLoadMore}
-          hasMore={hasMore}
-          onSelectMovie={handleOpenDetails}
-          onToggleWatchlist={handleToggleWatchlist}
-          watchlist={watchlist}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {activeTab === 'home' && <HeroSection key="hero" topShow={topShow} />}
+      </AnimatePresence>
+      <AnimatePresence mode="wait">
+        {activeTab === 'profile' ? (
+          <ProfileView key="profile" watchHistory={watchHistory} watchlist={watchlist} onSignOut={handleSignOut} onSelectMovie={handleOpenDetails} />
+        ) : (
+          <ContentGrid
+            key={`grid-${activeTab}`}
+            items={items}
+            loading={loading}
+            error={error}
+            title={titleMap[activeTab]}
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+            onSelectMovie={handleOpenDetails}
+            onToggleWatchlist={handleToggleWatchlist}
+            watchlist={watchlist}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
