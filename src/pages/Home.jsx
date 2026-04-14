@@ -109,6 +109,7 @@ const MovieCard = React.memo(({ movie, onSelect, onToggleWatchlist, isInWatchlis
       </button>
       <button
         type="button"
+        title={isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
         onClick={(e) => {
           e.stopPropagation()
           onToggleWatchlist(movie)
