@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const API_BASE = 'https://api.imdbapi.dev/titles'
+const API_BASE = import.meta.env.VITE_API_BASE_URL
 
 const typeMappings = {
   'home': [], 
