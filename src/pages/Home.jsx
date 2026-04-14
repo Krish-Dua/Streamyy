@@ -17,34 +17,41 @@ const Navbar = React.memo(({ activeTab, setActiveTab }) => {
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between gap-8 items-center h-16">
+          
+         
           <div className="flex items-center">
             <h1 className="text-xl font-bold text-indigo-600">Streamyy</h1>
           </div>
-          <div className="flex space-x-4 sm:space-x-6">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' })
-                  setActiveTab(tab.toLowerCase().replace(' ', '-'))
-                }}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition ${
-                  activeTab === tab.toLowerCase().replace(' ', '-')
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+
+          <div className="flex overflow-x-auto no-scrollbar space-x-2 sm:space-x-6">
+            {tabs.map((tab) => {
+              const tabKey = tab.toLowerCase().replace(' ', '-')
+
+              return (
+                <button
+                  key={tab}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    setActiveTab(tabKey)
+                  }}
+                  className={`whitespace-nowrap px-3 py-2 rounded-md text-sm font-medium transition ${
+                    activeTab === tabKey
+                      ? 'bg-indigo-100 text-indigo-700'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  {tab}
+                </button>
+              )
+            })}
           </div>
+
         </div>
       </div>
     </nav>
   )
 })
-
 const HeroSection = React.memo(({ topShow }) => (
   <motion.section
     initial={{ opacity: 0 }}
