@@ -50,7 +50,7 @@ const HeroSection = React.memo(({ topShow }) => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.6 }}
-    className="relative h-96 bg-linear-to-r from-indigo-500 to-violet-600 overflow-hidden"
+    className="relative h-120 bg-linear-to-r from-indigo-500 to-violet-600 overflow-hidden"
   >
     <div className="absolute inset-0 bg-black/20"></div>
     {topShow.poster && topShow.poster.includes('http') && (
@@ -61,7 +61,7 @@ const HeroSection = React.memo(({ topShow }) => (
         src={topShow.poster}
         alt={topShow.title}
         onError={(e) => { e.target.style.display = 'none' }}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover "
       />
     )}
     <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-8">
@@ -371,37 +371,6 @@ const Home = () => {
     return () => clearTimeout(timeoutId)
   }, [watchHistory])
 
-  const fetchTopShow = useCallback(async () => {
-    try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => {
-        controller.abort()
-      }, 30000)
-      
-      const response = await fetch(`${API_BASE}?limit=1`, { signal: controller.signal })
-      clearTimeout(timeoutId)
-      
-      if (!response.ok) throw new Error('Failed to fetch top show')
-      const data = await response.json()
-      const topItem = data.titles?.[0]
-      
-      if (topItem) {
-        setTopShow({
-          id: topItem.id,
-          title: topItem.primaryTitle,
-          poster: topItem.primaryImage?.url || null,
-          description: topItem.plot || 'No description available.',
-          rating: topItem.rating?.aggregateRating || 'N/A',
-          year: topItem.startYear
-        })
-      }
-    } catch (err) {
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchTopShow()
-  }, [fetchTopShow])
 
   const fetchItems = useCallback(async (tab, token = null, append = false) => {
     if (tab === 'profile') {
@@ -441,6 +410,19 @@ const Home = () => {
       
       const data = await response.json()
       const newItems = data.titles || []
+
+       const topItem = data.titles?.[6]
+      
+      if (topItem) {
+        setTopShow({
+          id: topItem.id,
+          title: topItem.primaryTitle,
+          poster: topItem.primaryImage?.url || null,
+          description: topItem.plot || 'No description available.',
+          rating: topItem.rating?.aggregateRating || 'N/A',
+          year: topItem.startYear
+        })
+      }
       
       if (!append) {
         setApiCache(prev => new Map(prev).set(cacheKey, data))
